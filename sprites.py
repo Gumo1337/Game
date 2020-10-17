@@ -10,7 +10,7 @@ class Player(pg.sprite.Sprite):
         self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.rect.center = (PLAYER_START_POS)
-        self.pos = vec(360, 240)
+        self.pos = vec(PLAYER_START_POS)
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
 
@@ -40,16 +40,32 @@ class Player(pg.sprite.Sprite):
         if self.pos.y < 0:
             self.pos.y = HEIGHT
 
-class Enemy(pg.sprite.Sprite):
+class Enemy(Player):
     def __init__(self):
-        pg.sprite.Sprite.__init__(self)
+        super(Enemy, self).__init__()
+        self.player = Player()
         self.image = pg.Surface(ENEMY_SIZE)
         self.image.fill(RED)
         self.rect = self.image.get_rect()
         self.rect.center = (ENEMY_START_POS)
+        self.pos = vec(ENEMY_START_POS)
+
+
 
     def update(self):
-        pass
+        self.player.update()
+        if(self.pos.x > self.player.pos.x):
+            self.pos.x -= 1
+        elif self.pos.x < self.player.pos.x:
+            self.pos.x += 1
+        if self.pos.y> self.player.pos.y:
+            self.pos.y -= 1
+        elif self.pos.y < self.player.pos.y:
+            self.pos.y+= 1
+        self.rect.center = self.pos
+
+
+
 
 class Bullet(pg.sprite.Sprite):
     def __init__(self):
@@ -58,6 +74,17 @@ class Bullet(pg.sprite.Sprite):
         self.image.fill(YELLOW)
         self.rect = self.image.get_rect()
         self.rect.center = (BULLET_START_POS)
+        self.pos = vec(BULLET_START_POS)
 
-score = 0
 
+    def update(self):
+        self.mousepos = pg.mouse.get_pos()
+        if self.mousepos[0] < self.pos.x:
+            self.pos.x -= 6
+        elif self.mousepos[0] > self.pos.x:
+            self.pos.x += 6
+        if self.mousepos[1] < self.pos.y:
+            self.pos.y -= 6
+        elif self.mousepos[1] > self.pos.y:
+            self.pos.y += 6
+        self.rect.center = self.pos
