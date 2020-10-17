@@ -1,19 +1,17 @@
-import pygame as pg
-from settings import *
 from sprites import *
 import random
-import sys
+
 
 class Game:
+
     def __init__(self):     # init
         self.running = True
+        self.game_over = False
         pg.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         self.clock = pg.time.Clock()
         pg.display.set_caption(TITLE)
         self.font_name = pg.font.match_font(FONT_NAME)
-
-    def new(self):      # new game
         self.score = 0
         self.all_sprites = pg.sprite.Group()
         self.player = Player()
@@ -22,6 +20,9 @@ class Game:
         self.all_sprites.add(self.enemy)
         self.bullet = Bullet()
         self.all_sprites.add(self.bullet)
+
+    def new(self):      # new game
+        self.score = 0
         self.run()
 
     def run(self):      # game loop\
@@ -36,7 +37,7 @@ class Game:
         self.all_sprites.update()
         if self.detect_collision_bullet():
             self.enemy_reset()
-        if (self.detect_collision()):
+        if self.detect_collision():
             self.game_over = True
             self.running = False
 
@@ -65,7 +66,7 @@ class Game:
         if self.player.pos.x < self.enemy.pos.x + ENEMY_SIZE[0] and\
                 self.player.pos.x + PLAYER_SIZE[0] > self.enemy.pos.x and\
                 self.player.pos.y < self.enemy.pos.y + ENEMY_SIZE[1] and\
-                self.player.pos.y + PLAYER_SIZE[1] > self.enemy.pos.y :
+                self.player.pos.y + PLAYER_SIZE[1] > self.enemy.pos.y:
             return True
 
     def detect_collision_bullet(self):
@@ -80,25 +81,16 @@ class Game:
         self.score += 1
         new_pos = random.randint(1, 4)
         if new_pos == 1:
-            self.enemy.pos = vec(620, 80)
+            self.enemy.pos = vec(ENEMY_START_POS2)
         elif new_pos == 2:
-            self.enemy.pos = vec(50, 50)
+            self.enemy.pos = vec(ENEMY_START_POS3)
         elif new_pos == 3:
-            self.enemy.pos = vec(50, 400)
+            self.enemy.pos = vec(ENEMY_START_POS4)
         elif new_pos == 4:
-            self.enemy.pos = vec(666, 410)
+            self.enemy.pos = vec(ENEMY_START_POS5)
 
     def show_start_screen(self):
         pass
 
     def show_game_over_screen(self):
         pass
-
-g = Game()
-g.show_start_screen()
-while g.running:
-    g.new()
-    g.show_game_over_screen()
-
-pg.quit()
-

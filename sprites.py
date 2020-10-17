@@ -9,7 +9,7 @@ class Player(pg.sprite.Sprite):
         self.image = pg.Surface(PLAYER_SIZE)
         self.image.fill(GREEN)
         self.rect = self.image.get_rect()
-        self.rect.center = (PLAYER_START_POS)
+        self.rect.center = PLAYER_START_POS
         self.pos = vec(PLAYER_START_POS)
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
@@ -40,6 +40,7 @@ class Player(pg.sprite.Sprite):
         if self.pos.y < 0:
             self.pos.y = HEIGHT
 
+
 class Enemy(Player):
     def __init__(self):
         super(Enemy, self).__init__()
@@ -47,24 +48,20 @@ class Enemy(Player):
         self.image = pg.Surface(ENEMY_SIZE)
         self.image.fill(RED)
         self.rect = self.image.get_rect()
-        self.rect.center = (ENEMY_START_POS)
+        self.rect.center = ENEMY_START_POS
         self.pos = vec(ENEMY_START_POS)
-
-
 
     def update(self):
         self.player.update()
-        if(self.pos.x > self.player.pos.x):
+        if self.pos.x > self.player.pos.x:
             self.pos.x -= 1
         elif self.pos.x < self.player.pos.x:
             self.pos.x += 1
-        if self.pos.y> self.player.pos.y:
+        if self.pos.y > self.player.pos.y:
             self.pos.y -= 1
         elif self.pos.y < self.player.pos.y:
-            self.pos.y+= 1
+            self.pos.y += 1
         self.rect.center = self.pos
-
-
 
 
 class Bullet(pg.sprite.Sprite):
@@ -73,18 +70,18 @@ class Bullet(pg.sprite.Sprite):
         self.image = pg.Surface(BULLET_SIZE)
         self.image.fill(YELLOW)
         self.rect = self.image.get_rect()
-        self.rect.center = (BULLET_START_POS)
+        self.rect.center = BULLET_START_POS
         self.pos = vec(BULLET_START_POS)
-
+        self.mouse_pos = pg.mouse.get_pos()
 
     def update(self):
-        self.mousepos = pg.mouse.get_pos()
-        if self.mousepos[0] < self.pos.x:
+        self.mouse_pos = pg.mouse.get_pos()
+        if self.mouse_pos[0] < self.pos.x:
             self.pos.x -= 6
-        elif self.mousepos[0] > self.pos.x:
+        elif self.mouse_pos[0] > self.pos.x:
             self.pos.x += 6
-        if self.mousepos[1] < self.pos.y:
+        if self.mouse_pos[1] < self.pos.y:
             self.pos.y -= 6
-        elif self.mousepos[1] > self.pos.y:
+        elif self.mouse_pos[1] > self.pos.y:
             self.pos.y += 6
         self.rect.center = self.pos
