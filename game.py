@@ -14,10 +14,16 @@ class Game:
         self.font_name = pg.font.match_font(FONT_NAME)
         self.score = 0
         self.all_sprites = pg.sprite.Group()
+        self.all_enemies = pg.sprite.Group()
         self.player = Player()
         self.all_sprites.add(self.player)
-        self.enemy = Enemy()
-        self.all_sprites.add(self.enemy)
+        self.enemy_list = pg.sprite.Group()
+        for i in range(ENEMY_COUNT):
+            self.enemy = Enemy()
+            self.enemy_list.add(self.enemy)
+            self.all_sprites.add(self.enemy)
+
+        self.all_enemies.add(self.enemy_list)
         self.bullet = Bullet()
         self.all_sprites.add(self.bullet)
 
@@ -35,11 +41,16 @@ class Game:
 
     def update(self):       # update game loop
         self.all_sprites.update()
-        if self.detect_collision_bullet():
-            self.enemy_reset()
-        if self.detect_collision():
+        hits = pg.sprite.spritecollide(self.player, self.enemy_list, False)
+        if hits:
             self.game_over = True
             self.running = False
+        bullet_hits = pg.sprite.spritecollide(self.bullet, self.enemy_list, True)
+        if bullet_hits:
+            self.e = Enemy()
+            self.all_sprites.add(self.e)
+            self.all_enemies.add(self.e)
+            self.score += 1
 
     def events(self):
         for event in pg.event.get():
@@ -76,18 +87,6 @@ class Game:
                 self.bullet.pos.y + BULLET_SIZE[1] > self.enemy.pos.y:
             print("Collision")
             return True
-
-    def enemy_reset(self):
-        self.score += 1
-        new_pos = random.randint(1, 4)
-        if new_pos == 1:
-            self.enemy.pos = vec(ENEMY_START_POS2)
-        elif new_pos == 2:
-            self.enemy.pos = vec(ENEMY_START_POS3)
-        elif new_pos == 3:
-            self.enemy.pos = vec(ENEMY_START_POS4)
-        elif new_pos == 4:
-            self.enemy.pos = vec(ENEMY_START_POS5)
 
     def show_start_screen(self):
         pass

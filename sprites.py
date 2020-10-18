@@ -1,7 +1,7 @@
 import pygame as pg
 from settings import *
 vec = pg.math.Vector2
-
+import random
 
 class Player(pg.sprite.Sprite):
     def __init__(self):
@@ -49,7 +49,16 @@ class Enemy(Player):
         self.image.fill(RED)
         self.rect = self.image.get_rect()
         self.rect.center = ENEMY_START_POS
-        self.pos = vec(ENEMY_START_POS)
+        new_pos = random.randint(1, 4)
+        if new_pos == 1:
+            x = vec(ENEMY_START_POS2)
+        elif new_pos == 2:
+            x = vec(ENEMY_START_POS3)
+        elif new_pos == 3:
+            x = vec(ENEMY_START_POS4)
+        elif new_pos == 4:
+            x = vec(ENEMY_START_POS5)
+        self.pos = vec(x)
 
     def update(self):
         self.player.update()
